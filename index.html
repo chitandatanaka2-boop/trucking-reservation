@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SebEx – Make a Reservation</title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #0A1A2F; /* NAVY BLUE */
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+    }
+
+    .container {
+        background: #0A1A2F; /* NAVY BLUE */
+        width: 400px;
+        padding: 28px;
+        border-radius: 15px;
+        /* Gold gradient border */
+        border: 4px solid;
+        border-image-slice: 1;
+        border-width: 4px;
+        border-image-source: linear-gradient(45deg, #D4AF37, #FFD700);
+        /* Soft shadow */
+        box-shadow: 0 10px 25px rgba(212, 175, 55, 0.5);
+        color: #D4AF37; /* GOLD text inside container */
+    }
+
+    .logo {
+        width: 130px;
+        display: block;
+        margin: 0 auto 10px auto;
+    }
+
+    h2 {
+        text-align: center;
+        color: #FFD700; /* GOLD heading brighter */
+        font-weight: 800;
+    }
+
+    label {
+        margin-top: 14px;
+        display: block;
+        font-weight: 600;
+        color: #FFD700; /* GOLD labels brighter */
+    }
+
+    input, select, textarea {
+        width: 100%;
+        padding: 10px;
+        border: 2px solid #FFD700; /* GOLD BORDER brighter */
+        border-radius: 8px;
+        margin-top: 6px;
+        color: #0A1A2F; /* NAVY TEXT inside input */
+        font-weight: 600;
+        background-color: #F5F5F5; /* light background for readability */
+    }
+
+    textarea {
+        resize: vertical;
+    }
+
+    button {
+        width: 100%;
+        padding: 12px;
+        margin-top: 20px;
+        border: none;
+        font-size: 16px;
+        background-color: #FFD700; /* GOLD button brighter */
+        color: #0A1A2F;           /* NAVY TEXT */
+        border-radius: 8px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    button:hover {
+        opacity: 0.88;
+        transform: scale(1.02);
+    }
+
+    .price-box {
+        margin-top: 18px;
+        padding: 12px;
+        background: #0A1A2F; /* NAVY */
+        border-radius: 10px;
+        font-weight: bold;
+        text-align: center;
+        color: #FFD700; /* GOLD */
+        border: 2px solid #FFD700; /* GOLD border */
+    }
+
+    /* WhatsApp button styling to match theme */
+    #whatsappBtn {
+        background-color: #FFD700; /* GOLD button brighter */
+        color: #0A1A2F; /* NAVY text */
+        margin-top: 10px;
+    }
+
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+    <!-- SEBEX LOGO -->
+	<img src="https://i.ibb.co/YBpfm8cF/sebex.png" class="logo">
+
+    <h2>Make a Reservation</h2>
+
+    <form id="reserveForm">
+
+        <!-- TYPE OF TRUCK -->
+        <label>Type of Truck Needed</label>
+        <select name="truckType" id="truckType" required>
+            <option value="">Select truck type</option>
+            <option value="Flatbed">Flatbed</option>
+            <option value="Refrigerated">Refrigerated</option>
+            <option value="Box Truck">Box Truck</option>
+            <option value="Tanker">Tanker</option>
+        </select>
+
+        <!-- TYPE OF CARGO -->
+        <label>Type of Cargo</label>
+        <select name="cargoType" required>
+            <option value="">Select cargo type</option>
+            <option value="Machinery">Machinery</option>
+            <option value="Produce">Produce</option>
+            <option value="Fuel">Fuel</option>
+            <option value="Construction Materials">Construction Materials</option>
+            <option value="Electronics">Electronics</option>
+        </select>
+
+        <!-- LOAD WEIGHT -->
+        <label>Load Weight (kg)</label>
+        <input type="number" name="weight" id="weight" placeholder="e.g. 500" required>
+
+        <!-- PICKUP LOCATION -->
+        <label>Pick-up Location</label>
+        <select name="pickup" id="pickup" required>
+            <option value="">Select pick-up location</option>
+            <option value="Harare">Harare</option>
+            <option value="Bulawayo">Bulawayo</option>
+            <option value="Mutare">Mutare</option>
+            <option value="Gweru">Gweru</option>
+            <option value="Masvingo">Masvingo</option>
+        </select>
+
+        <!-- DESTINATION -->
+        <label>Destination</label>
+        <select name="destination" id="destination" required>
+            <option value="">Select destination</option>
+            <option value="Harare">Harare</option>
+            <option value="Bulawayo">Bulawayo</option>
+            <option value="Mutare">Mutare</option>
+            <option value="Gweru">Gweru</option>
+            <option value="Masvingo">Masvingo</option>
+        </select>
+
+        <!-- PRICE OUTPUT -->
+        <div class="price-box">
+            Estimated Price: <span id="price">US$0.00</span>
+        </div>
+
+        <!-- DATES -->
+        <label>Pick-up Date</label>
+        <input type="date" name="pickupDate" required>
+
+        <label>Delivery Date</label>
+        <input type="date" name="deliveryDate" required>
+
+        <!-- SPECIAL HANDLING -->
+        <label>Special Handling Instructions</label>
+        <textarea name="instructions" rows="3" placeholder="Fragile, temperature control, hazardous, etc."></textarea>
+
+        <!-- SUBMIT BUTTON -->
+        <button type="submit">Reserve Truck</button>
+
+        <!-- WHATSAPP BUTTON -->
+        <button type="button" id="whatsappBtn">Send via WhatsApp</button>
+
+    </form>
+
+</div>
+
+<script>
+
+// Distance table (example values)
+const distances = {
+    "Harare": 0,
+    "Bulawayo": 435,
+    "Mutare": 265,
+    "Gweru": 277,
+    "Masvingo": 293
+};
+
+// Price per km by truck type
+const truckRates = {
+    "Flatbed": 1.20,
+    "Refrigerated": 1.60,
+    "Box Truck": 1.10,
+    "Tanker": 2.00
+};
+
+function calculatePrice() {
+    const truck = document.getElementById("truckType").value;
+    const pickup = document.getElementById("pickup").value;
+    const destination = document.getElementById("destination").value;
+    const weight = parseFloat(document.getElementById("weight").value);
+
+    if (!truck || !pickup || !destination || !weight) {
+        document.getElementById("price").innerText = "US$0.00";
+        return;
+    }
+
+    const distance = Math.abs(distances[pickup] - distances[destination]);
+    const baseRate = truckRates[truck];
+    const weightFee = weight * 0.05;
+
+    const total = (distance * baseRate) + weightFee;
+
+    document.getElementById("price").innerText = "US$" + total.toFixed(2);
+}
+
+document.querySelectorAll("#truckType, #pickup, #destination, #weight")
+    .forEach(el => el.addEventListener("input", calculatePrice));
+
+document.getElementById("reserveForm").addEventListener("submit", function(e){
+    e.preventDefault();
+    alert("Your SebEx Reservation has been successfully submitted!");
+    this.reset();
+    document.getElementById("price").innerText = "US$0.00";
+});
+
+// WhatsApp button functionality
+document.getElementById("whatsappBtn").addEventListener("click", function(){
+    const truck = document.getElementById("truckType").value;
+    const cargo = document.querySelector('select[name="cargoType"]').value;
+    const weight = document.getElementById("weight").value;
+    const pickup = document.querySelector('select[name="pickup"]').value;
+    const destination = document.querySelector('select[name="destination"]').value;
+    const pickupDate = document.querySelector('input[name="pickupDate"]').value;
+    const deliveryDate = document.querySelector('input[name="deliveryDate"]').value;
+    const instructions = document.querySelector('textarea[name="instructions"]').value;
+    const price = document.getElementById("price").innerText;
+
+    if(!truck || !cargo || !weight || !pickup || !destination || !pickupDate || !deliveryDate){
+        alert("Please fill all required fields before sending via WhatsApp!");
+        return;
+    }
+
+    const message = `Hello! I want to make a SebEx reservation:\n\n` +
+                    `Truck Type: ${truck}\n` +
+                    `Cargo Type: ${cargo}\n` +
+                    `Load Weight: ${weight} kg\n` +
+                    `Pick-up: ${pickup}\n` +
+                    `Destination: ${destination}\n` +
+                    `Pick-up Date: ${pickupDate}\n` +
+                    `Delivery Date: ${deliveryDate}\n` +
+                    `Special Instructions: ${instructions}\n` +
+                    `Estimated Price: ${price}`;
+
+    const whatsappNumber = "263785966037"; // <-- replace with your WhatsApp number
+    const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+    window.open(url, "_blank");
+});
+
+</script>
+
+</body>
+</html>
